@@ -37,7 +37,7 @@ except Exception as e:
 
 for t in tix:
 	tid = t['id'].replace('ticket/','')
-	turl = "{}/RTIR/Incident/Display.html?id={}".format(rturl,tid)
+	turl = "{}/Ticket/Display.html?id={}".format(rturl,tid)
 	tres = t['CF.{Resolution}']
 	if tres == '':
 		tres = "Still open"
