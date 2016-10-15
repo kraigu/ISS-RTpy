@@ -10,3 +10,13 @@ username=yourusername
 hostname=yourrtinstance
 password=guessme
 ```
+
+TODO
+----
+
+* Pretty print function for individual tickets?
+
+License
+-------
+
+BSD-new. Original author Mike Patterson <mike.patterson@uwaterloo.ca> for the University of Waterloo, 2016.
