@@ -30,10 +30,10 @@ except Exception as e:
 
 #tix = tracker.search(Queue='Incidents',raw_query="Subject LIKE '%Test%'")
 try:
-	qstring ="""(Queue = 'Incidents' OR Queue = 'Investigations')
-	AND CF.{{IP}} = '{}'""".format(args.sip)
+	qstring = """((Lifecycle = 'incidents' OR Lifecycle = 'investigations')) AND Status != 'abandoned' AND CF.{{IP}} = '{}'""".format(args.sip)
+	print "DEBUG: {}".format(qstring)
 	tix = tracker.search(Queue=rt.ALL_QUEUES,raw_query=qstring)
-	# Need to stipulate ALL_QUEUES or it searches no queues, and we want to look at two
+	# Need to stipulate ALL_QUEUES or it searches no queues
 except Exception as e:
 	print e
 	sys.exit(43)
@@ -50,9 +50,12 @@ for t in tix:
 
 	if tres == '':
 		tres = "Still open"
-	tconst = t['CF.{Constituency}']
+	tconst = t['Queue']
 	if tconst == '':
 		tconst = "Unset"
+	else:
+		tconst = tconst.replace('Incidents - ','')
+		tconst = tconst.replace('Investigations - ','')
 	print """{}:\t{}
 {} / {}
 {}
