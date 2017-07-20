@@ -47,7 +47,10 @@ else:
 print "Searching between {} and {}".format(sdate,edate)
 
 try:
-	tix = tracker.search(Queue='Incidents', order='Created', Created__gt = sdate, Created__lt = edate)
+	# raw search because we want to look at lifecycle, not supported in python-rt 1.0.9
+	# ALL_QUEUES because LIKE functionality for queues not supported in python-rt 1.0.9
+	rquery = "Lifecycle = 'incidents' AND Created > '{0}' AND Created < '{1}' AND Status != 'abandoned'".format(sdate,edate)
+	tix = tracker.search(Queue=rt.ALL_QUEUES, raw_query = rquery)
 except Exception as e:
 	print e
 	sys.exit(43)
@@ -58,7 +61,7 @@ def print_summary():
 
 	for t in tix:
 		itype = t['CF.{Classification}']
-		constit = t['CF.{Constituency}']
+		constit = t['Queue'].replace('Incidents -','')
 		if itype in itypes:
 			itypes[itype] += 1
 		else:
@@ -77,10 +80,10 @@ def print_summary():
 def print_verbose():
 	for t in tix:
 		tid = t['id'].replace('ticket/','')
-		tconst = t['CF.{Constituency}']
+		tconst = t['Queue'].replace('Incidents -','')
 		if tconst == '':
 			tconst = "Unset"
-		print "{}\t{}\t{}".format(tid,tconst,t['Subject'])
+		print "{}\t{}\t{}\t{}".format(tid,tconst,t['CF.{Classification}'],t['Subject'])
 
 if args.verbose:
 	print_verbose()
