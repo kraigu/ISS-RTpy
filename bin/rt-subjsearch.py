@@ -30,7 +30,9 @@ except Exception as e:
 
 #tix = tracker.search(Queue='Incidents',raw_query="Subject LIKE '%Test%'")
 try:
-	tix = tracker.search(Queue='Incidents', Subject__like = args.ssubject)
+	# we're really only interested in incidents, this script might be named badly
+	rquery = "Lifecycle = 'incidents' AND Subject LIKE '{}' AND Status != 'abandoned'".format(args.ssubject)
+	tix = tracker.search(Queue=rt.ALL_QUEUES, raw_query = rquery)
 except Exception as e:
 	print e
 	sys.exit(43)
@@ -41,7 +43,7 @@ for t in tix:
 	tres = t['CF.{Resolution}']
 	if tres == '':
 		tres = "Still open"
-	tconst = t['CF.{Constituency}']
+	tconst = t['Queue']
 	if tconst == '':
 		tconst = "Unset"
 	print """{}:\t{}
