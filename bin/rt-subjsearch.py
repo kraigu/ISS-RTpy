@@ -28,7 +28,6 @@ except Exception as e:
         print "Could not authenticate to RT:\n{}".format(e)
         sys.exit(42)
 
-#tix = tracker.search(Queue='Incidents',raw_query="Subject LIKE '%Test%'")
 try:
 	# we're really only interested in incidents, this script might be named badly
 	rquery = "Lifecycle = 'incidents' AND Subject LIKE '{}' AND Status != 'abandoned'".format(args.ssubject)
@@ -38,7 +37,7 @@ except Exception as e:
 	sys.exit(43)
 
 for t in tix:
-	tid = t['id'].replace('ticket/','')
+	tid = t['id'].replace('ticket/','ID:')
 	turl = "{}/Ticket/Display.html?id={}".format(rturl,tid)
 	tres = t['CF.{Resolution}']
 	if tres == '':
