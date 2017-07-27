@@ -37,17 +37,15 @@ except Exception as e:
 	sys.exit(43)
 
 for t in tix:
-	tid = t['id'].replace('ticket/','ID:')
+	tid = t['id'].replace('ticket/','')
 	turl = "{}/Ticket/Display.html?id={}".format(rturl,tid)
 	tres = t['CF.{Resolution}']
 	if tres == '':
 		tres = "Still open"
-	tconst = t['Queue']
-	if tconst == '':
-		tconst = "Unset"
-	print """{}:\t{}
-{} / {}
-{}
-Status: {}\tResolution: {}
-Created: {}\tUpdated: {}
-""".format(tid,t['Subject'],t['Queue'],tconst,turl,t['Status'],tres,t['Created'],t['LastUpdated'])
+	print """ID: {0} ({4})
+{3}
+{1}
+{2}
+Resolution: {5}
+Created: {6}\tUpdated: {7}
+""".format(tid,t['Subject'],t['Queue'],turl,t['Status'],tres,t['Created'],t['LastUpdated'])
