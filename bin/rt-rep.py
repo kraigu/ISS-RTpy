@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rt
-import ConfigParser
+import configparser
 import os
 import sys
 import argparse
@@ -9,14 +9,14 @@ import datetime as DT
 from dateutil.relativedelta import *
 
 try:
-	config = ConfigParser.RawConfigParser()
+	config = configparser.RawConfigParser()
 	config.read(os.path.expanduser('~/.rtrcp'))
 	rturl = "https://{0}".format(config.get('rt','hostname'))
 	rtpoint = "{0}/REST/1.0/".format(rturl)
 	rtuser = config.get('rt','username')
 	rtpass = config.get('rt','password')
 except Exception as e:
-	print "Could not read config file or file is missing configuration elements:\n{}".format(e)
+	print("Could not read config file or file is missing configuration elements:\n{}".format(e))
 	sys.exit(41)
 
 aparse = argparse.ArgumentParser(description="Report on RT incidents created during a given timespan (defaults to a summary of last month)")
@@ -29,7 +29,7 @@ tracker = rt.Rt(rtpoint, rtuser, rtpass)
 try:
         tracker.login()
 except Exception as e:
-        print "Could not authenticate to RT:\n{}".format(e)
+        print("Could not authenticate to RT:\n{}".format(e))
         sys.exit(42)
 
 if args.startdate is not None:
@@ -44,15 +44,15 @@ if args.enddate is not None:
 else:
 	edate = DT.date.today()+relativedelta(day=1)
 
-print "Searching between {} and {}".format(sdate,edate)
+print("Searching between {} and {}".format(sdate,edate))
 
 try:
 	# raw search because we want to look at lifecycle, not supported in python-rt 1.0.9
 	# ALL_QUEUES because LIKE functionality for queues not supported in python-rt 1.0.9
-	rquery = "Lifecycle = 'incidents' AND Created > '{0}' AND Created < '{1}' AND Status != 'abandoned'".format(sdate,edate)
+	rquery = "Lifecycle = 'incidents' AND Created > '{0}' AND Created < '{1}' AND Status != 'abandoned' AND CF.Classification != 'Question Only'".format(sdate,edate)
 	tix = tracker.search(Queue=rt.ALL_QUEUES, raw_query = rquery)
 except Exception as e:
-	print e
+	print(e)
 	sys.exit(43)
 
 def print_summary():
@@ -72,10 +72,10 @@ def print_summary():
 			constits[constit] = 1
 
 	for t in sorted(itypes):
-		print "{}\t\t{}".format(itypes[t],t)
-	print "\n"
+		print("{}\t\t{}".format(itypes[t],t))
+	print("\n")
 	for c in sorted(constits):
-		print "{}\t\t{}".format(constits[c],c)
+		print("{}\t\t{}".format(constits[c],c))
 
 def print_verbose():
 	for t in tix:
@@ -83,7 +83,7 @@ def print_verbose():
 		tconst = t['Queue'].replace('Incidents -','')
 		if tconst == '':
 			tconst = "Unset"
-		print "{}\t{}\t{}\t{}".format(tid,tconst,t['CF.{Classification}'],t['Subject'])
+		print("{}\t{}\t{}\t{}".format(tid,tconst,t['CF.{Classification}'],t['Subject']))
 
 if args.verbose:
 	print_verbose()
