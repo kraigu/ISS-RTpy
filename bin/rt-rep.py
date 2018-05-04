@@ -32,18 +32,9 @@ except Exception as e:
         print("Could not authenticate to RT:\n{}".format(e))
         sys.exit(42)
 
-if args.startdate is not None:
-	sdate = args.startdate
-else:
-	# need to calculate it on our own
-	# first day of last month
-	sdate = DT.date.today()+relativedelta(months=-1,day=1)
-
-if args.enddate is not None:
-	edate = args.enddate
-else:
-	edate = DT.date.today()+relativedelta(day=1)
-
+# if we need to calculate it on our own, then first day of last month
+sdate = args.startdate or DT.date.today()+relativedelta(months=-1,day=1)
+edate = args.enddate or edate = DT.date.today()+relativedelta(day=1)
 print("Searching between {} and {}".format(sdate,edate))
 
 try:
@@ -62,14 +53,8 @@ def print_summary():
 	for t in tix:
 		itype = t['CF.{Classification}']
 		constit = t['Queue'].replace('Incidents -','')
-		if itype in itypes:
-			itypes[itype] += 1
-		else:
-			itypes[itype] = 1
-		if constit in constits:
-			constits[constit] += 1
-		else:
-			constits[constit] = 1
+		itypes[itype] = itypes.get(itype, 0) + 1
+		constits[constit] = constits.get(constit, 0) + 1
 
 	for t in sorted(itypes):
 		print("{}\t\t{}".format(itypes[t],t))
@@ -80,9 +65,7 @@ def print_summary():
 def print_verbose():
 	for t in tix:
 		tid = t['id'].replace('ticket/','')
-		tconst = t['Queue'].replace('Incidents -','')
-		if tconst == '':
-			tconst = "Unset"
+		tconst = t['Queue'].replace('Incidents -','') or "Unset"
 		print("{}\t{}\t{}\t{}".format(tid,tconst,t['CF.{Classification}'],t['Subject']))
 
 if args.verbose:
