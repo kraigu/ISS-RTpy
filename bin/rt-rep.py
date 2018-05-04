@@ -34,7 +34,7 @@ except Exception as e:
 
 # if we need to calculate it on our own, then first day of last month
 sdate = args.startdate or DT.date.today()+relativedelta(months=-1,day=1)
-edate = args.enddate or edate = DT.date.today()+relativedelta(day=1)
+edate = args.enddate or DT.date.today()+relativedelta(day=1)
 print("Searching between {} and {}".format(sdate,edate))
 
 try:
