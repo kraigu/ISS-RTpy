@@ -25,7 +25,7 @@ tracker = rt.Rt(rtpoint, rtuser, rtpass)
 try:
         tracker.login()
 except Exception as e:
-        print "Could not authenticate to RT:\n{}".format(e)
+        print("Could not authenticate to RT:\n{}".format(e))
         sys.exit(42)
 
 try:
@@ -33,7 +33,7 @@ try:
 	rquery = "Lifecycle = 'incidents' AND Subject LIKE '{}' AND Status != 'abandoned'".format(args.ssubject)
 	tix = tracker.search(Queue=rt.ALL_QUEUES, raw_query = rquery)
 except Exception as e:
-	print e
+	print(e)
 	sys.exit(43)
 
 for t in tix:
@@ -42,10 +42,11 @@ for t in tix:
 	tres = t['CF.{Resolution}']
 	if tres == '':
 		tres = "Still open"
-	print """ID: {0} ({4})
+	print("""ID: {0} ({4})
 {3}
 {1}
 {2}
 Resolution: {5}
 Created: {6}\tUpdated: {7}
-""".format(tid,t['Subject'],t['Queue'],turl,t['Status'],tres,t['Created'],t['LastUpdated'])
+""".format(tid,t['Subject'],t['Queue'],turl,t['Status'],tres,t['Created'],t['LastUpdated']))
+
