@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 
 import rt
-import ConfigParser
+import configparser
 import os
 import sys
 import argparse
 
 try:
-	config = ConfigParser.RawConfigParser()
+	config = configparser.RawConfigParser()
 	config.read(os.path.expanduser('~/.rtrcp'))
 	rturl = "https://{0}".format(config.get('rt','hostname'))
 	rtpoint = "{0}/REST/1.0/".format(rturl)
 	rtuser = config.get('rt','username')
 	rtpass = config.get('rt','password')
 except Exception as e:
-	print "Could not read config file or file is missing configuration elements:\n{}".format(e)
+	print("Could not read config file or file is missing configuration elements:\n{}".format(e))
 	sys.exit(41)
 
 aparse = argparse.ArgumentParser()
