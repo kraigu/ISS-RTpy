@@ -18,7 +18,8 @@ password=guessme
 TODO
 ----
 
-* Pretty print function for individual tickets?
+* [X] Automated testing
+* [ ] Pretty print function for individual tickets?
 
 License
 -------
