@@ -32,12 +32,4 @@ except Exception as e:
 
 for t in tix:
 	tid = t['id'].replace('ticket/','')
-	turl = "{}/Ticket/Display.html?id={}".format(rturl,tid)
-	print("""ID: {0}
-{3}
-{1}
-{2}
-Userid: {7}
-Created: {5}\tUpdated: {6}
-""".format(tid,t['Subject'],t['Queue'],turl,t['Status'],t['Created'],t['LastUpdated'],t['CF.{Userid}']))
-
+	print("""{}\t{}\t{}""".format(tid,t['LastUpdated'],t['CF.{Userid}']))
