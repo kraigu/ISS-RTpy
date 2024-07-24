@@ -49,24 +49,36 @@ except Exception as e:
 def print_summary():
 	itypes = {}
 	constits = {}
-
+	severity = [0,0,0,0,0,0]
 	for t in tix:
 		itype = t['CF.{Classification}']
 		constit = t['Queue'].replace('Incidents -','')
 		itypes[itype] = itypes.get(itype, 0) + 1
 		constits[constit] = constits.get(constit, 0) + 1
-
+		# what a misbegotten use of try/except and I do it again later!
+		try:
+			severity[int(t['CF.{Risk Severity}'])] += 1
+		except:
+			severity[0] += 1
 	for t in sorted(itypes):
 		print("{}\t\t{}".format(itypes[t],t))
 	print("\n")
+	for i,s in enumerate(severity):
+		print("Severity {}:\t{}".format(i,s))
+	print("\n")
 	for c in sorted(constits):
 		print("{}\t\t{}".format(constits[c],c))
+
 
 def print_verbose():
 	for t in tix:
 		tid = t['id'].replace('ticket/','')
 		tconst = t['Queue'].replace('Incidents -','') or "Unset"
-		print("{}\t{}\t{}\t{}".format(tid,tconst,t['CF.{Classification}'],t['Subject']))
+		try:
+			tsev = int(t['CF.{Risk Severity}'])
+		except:
+			tsev = 0
+		print("{}\t{}\t{}\t{}\t{}".format(tid,tconst,t['CF.{Classification}'],tsev,t['Subject']))
 
 if args.verbose:
 	print_verbose()
