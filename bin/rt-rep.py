@@ -40,7 +40,7 @@ print("Searching between {} and {}".format(sdate,edate))
 try:
 	# raw search because we want to look at lifecycle, not supported in python-rt 1.0.9
 	# ALL_QUEUES because LIKE functionality for queues not supported in python-rt 1.0.9
-	rquery = "Lifecycle = 'incidents' AND Created > '{0}' AND Created < '{1}' AND Status != 'abandoned' AND CF.Classification != 'Question Only'".format(sdate,edate)
+	rquery = "Lifecycle = 'incidents' AND Created > '{0}' AND Created < '{1}' AND Status != 'abandoned' AND CF.Resolution != 'abandoned' AND CF.Classification != 'Question Only'".format(sdate,edate)
 	tix = tracker.search(Queue=rt.ALL_QUEUES, raw_query = rquery)
 except Exception as e:
 	print(e)
