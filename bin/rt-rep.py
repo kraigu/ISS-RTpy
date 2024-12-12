@@ -78,7 +78,7 @@ def print_verbose():
 			tsev = int(t['CF.{Risk Severity}'])
 		except:
 			tsev = 0
-		print("{}\t{}\t{}\t{}\t{}".format(tid,tconst,t['CF.{Classification}'],tsev,t['Subject']))
+		print("{}\t{}\t{}\t{}\t{}\t{}".format(tid,tconst,t['Created'],t['CF.{Classification}'],tsev,t['Subject']))
 
 if args.verbose:
 	print_verbose()
